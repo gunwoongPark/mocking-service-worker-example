@@ -10,7 +10,7 @@ export const handlers = [
 
   // 할일 추가
   rest.post("/todos", (req, res, ctx) => {
-    todoList.push(req.body);
+    todoList.push(req.body.todo);
     return res(ctx.status(201));
   }),
 ];
