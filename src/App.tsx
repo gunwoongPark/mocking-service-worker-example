@@ -56,13 +56,21 @@ function App() {
     console.log(checkedTodoIdList);
   }, [checkedTodoIdList]);
 
-  const onChangeCheckbox = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      console.log("check on !!");
-    } else {
-      console.log("check off !!");
-    }
-  }, []);
+  const onChangeCheckbox = useCallback(
+    (e: ChangeEvent<HTMLInputElement>, clickedId: number) => {
+      if (e.target.checked) {
+        setCheckedTodoIdList((prevCheckedList) => [
+          ...prevCheckedList,
+          clickedId,
+        ]);
+      } else {
+        setCheckedTodoIdList((prevCheckedList) =>
+          prevCheckedList.filter((checkedTodoId) => checkedTodoId !== clickedId)
+        );
+      }
+    },
+    []
+  );
 
   return (
     <Pub.Container>
@@ -70,7 +78,10 @@ function App() {
         {todoList.map((todo, index) => (
           <div className="todo-container">
             <li key={`todo-list-item-${index}-${todo.id}`}>{todo.todo}</li>
-            <input type="checkbox" onChange={(e) => onChangeCheckbox(e)} />
+            <input
+              type="checkbox"
+              onChange={(e) => onChangeCheckbox(e, todo.id)}
+            />
           </div>
         ))}
       </ul>
