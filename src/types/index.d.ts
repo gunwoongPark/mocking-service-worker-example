@@ -6,3 +6,7 @@ export interface TodoListType {
 export interface TodoSaveReq {
   todo: string;
 }
+
+export interface TodoDeleteReq {
+  idList: number[];
+}

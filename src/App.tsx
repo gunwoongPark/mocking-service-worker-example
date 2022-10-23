@@ -20,8 +20,6 @@ function App() {
     try {
       const res = await axios.get("/todos");
 
-      console.log(res);
-
       setTodoList(res.data);
     } catch (error) {
       console.log(error);
@@ -45,16 +43,23 @@ function App() {
   }, [todoInput, fetchTodoList]);
 
   // delete todo
-  const onDeleteTodo = useCallback(() => {
-    if (!checkedTodoIdList.length) {
-      alert("삭제할 할 일을 선택해주세요.");
-      return;
-    }
-  }, [checkedTodoIdList.length]);
+  const onDeleteTodo = useCallback(async () => {
+    try {
+      if (!checkedTodoIdList.length) {
+        alert("삭제할 할 일을 선택해주세요.");
+        return;
+      }
 
-  useEffect(() => {
-    console.log(checkedTodoIdList);
-  }, [checkedTodoIdList]);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const res = await axios.post("/todos/delete", {
+        idList: checkedTodoIdList,
+      });
+
+      fetchTodoList();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [checkedTodoIdList, fetchTodoList]);
 
   const onChangeCheckbox = useCallback(
     (e: ChangeEvent<HTMLInputElement>, clickedId: number) => {
@@ -76,8 +81,11 @@ function App() {
     <Pub.Container>
       <ul>
         {todoList.map((todo, index) => (
-          <div className="todo-container">
-            <li key={`todo-list-item-${index}-${todo.id}`}>{todo.todo}</li>
+          <div
+            className="todo-container"
+            key={`todo-list-item-${index}-${todo.id}`}
+          >
+            <li>{todo.todo}</li>
             <input
               type="checkbox"
               onChange={(e) => onChangeCheckbox(e, todo.id)}
