@@ -1,7 +1,7 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { TodoListType } from "./types";
-import styled from "styled-components";
+import Todo from "./components/Todo";
 
 function App() {
   // useState
@@ -61,36 +61,15 @@ function App() {
     }
   }, [checkedTodoIdList, fetchTodoList]);
 
-  const onChangeCheckbox = useCallback(
-    (e: ChangeEvent<HTMLInputElement>, clickedId: number) => {
-      if (e.target.checked) {
-        setCheckedTodoIdList((prevCheckedList) => [
-          ...prevCheckedList,
-          clickedId,
-        ]);
-      } else {
-        setCheckedTodoIdList((prevCheckedList) =>
-          prevCheckedList.filter((checkedTodoId) => checkedTodoId !== clickedId)
-        );
-      }
-    },
-    []
-  );
-
   return (
-    <Pub.Container>
+    <>
       <ul>
         {todoList.map((todo, index) => (
-          <div
-            className="todo-container"
-            key={`todo-list-item-${index}-${todo.id}`}
-          >
-            <li>{todo.todo}</li>
-            <input
-              type="checkbox"
-              onChange={(e) => onChangeCheckbox(e, todo.id)}
-            />
-          </div>
+          <Todo
+            key={`todo-list-item-${todo.id}-${index}`}
+            todo={todo}
+            setCheckedTodoIdList={setCheckedTodoIdList}
+          />
         ))}
       </ul>
       <div>
@@ -103,17 +82,8 @@ function App() {
         <button onClick={() => onSaveTodo()}>save</button>
       </div>
       <button onClick={() => onDeleteTodo()}>delete</button>
-    </Pub.Container>
+    </>
   );
 }
 
 export default App;
-
-const Pub = {
-  Container: styled.div`
-    .todo-container {
-      display: flex;
-      align-items: center;
-    }
-  `,
-};
