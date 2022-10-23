@@ -10,3 +10,8 @@ export interface TodoSaveReq {
 export interface TodoDeleteReq {
   idList: number[];
 }
+
+export interface TodoModifyReq {
+  id: number;
+  todo: string;
+}

@@ -69,6 +69,7 @@ function App() {
             key={`todo-list-item-${todo.id}-${index}`}
             todo={todo}
             setCheckedTodoIdList={setCheckedTodoIdList}
+            fetchTodoList={fetchTodoList}
           />
         ))}
       </ul>
